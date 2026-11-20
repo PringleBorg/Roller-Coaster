@@ -1,2 +1,4 @@
 # Roller-Coaster
-WEEEEEEEEE
+if joachim has broken arm
+print(knor)
+
