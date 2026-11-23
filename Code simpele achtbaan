@@ -1,0 +1,60 @@
+"""Achtbaan met de methode van Euler (testbaan: parabool y = lambda^2 / 2)."""
+import numpy as np
+import matplotlib.pyplot as plt
+
+g = 9.81
+
+# Baan: x(l) = l, y(l) = l^2 / 2  ->  afgeleiden naar lambda
+def derivs(l):
+    return 1.0, 0.0, l, 1.0          # x', x'', y', y''
+
+def y(l):
+    return 0.5 * l**2
+
+def rhs(l, u):
+    """Rechterkant van het stelsel: dl/dt = u, du/dt = ..."""
+    xp, xpp, yp, ypp = derivs(l)
+    du = (-g * yp - (xp * xpp + yp * ypp) * u**2) / (xp**2 + yp**2)
+    return u, du
+
+def euler(l0, u0, h, T):
+    n = int(T / h)
+    t = np.linspace(0, n * h, n + 1)
+    l = np.empty(n + 1); u = np.empty(n + 1)
+    l[0], u[0] = l0, u0
+    for k in range(n):
+        dl, du = rhs(l[k], u[k])
+        l[k + 1] = l[k] + h * dl
+        u[k + 1] = u[k] + h * du
+    return t, l, u
+
+def energy(l, u):
+    xp, _, yp, _ = derivs(l)
+    v = np.sqrt(xp**2 + yp**2) * u    # snelheid v = sqrt(x'^2 + y'^2) * dl/dt
+    return 0.5 * v**2 + g * y(l)
+
+def felt_acceleration(l, u):
+    xp, xpp, yp, ypp = derivs(l)
+    s = np.sqrt(xp**2 + yp**2)
+    return (g * xp + (ypp * xp - xpp * yp) * u**2) / s
+
+l0, u0, T = -3.0, 0.0, 6.0           # start boven in de parabool, in rust
+
+fig, ax = plt.subplots(1, 2, figsize=(11, 4))
+for h in (0.01, 0.001):
+    t, l, u = euler(l0, u0, h, T)
+    E = energy(l, u)
+    drift = np.max(np.abs(E - E[0]))
+    print(f"h = {h}: maximale energieafwijking = {drift:.3f}  (E0 = {E[0]:.3f})")
+    ax[1].plot(t, E, label=f"h = {h}")
+    if h == 0.001:
+        ax[0].plot(l, y(l), "k-", lw=1, label="baan")
+        ax[0].plot(l[::200], y(l[::200]), "ro", ms=4, label="karretje")
+        print(f"Max. gevoelde versnelling: {felt_acceleration(l, u).max():.2f} m/s^2")
+
+ax[0].set(xlabel="x", ylabel="y", title="Baan en positie karretje")
+ax[0].legend()
+ax[1].set(xlabel="t (s)", ylabel="E = v^2/2 + g*y", title="Energiecontrole")
+ax[1].legend()
+plt.tight_layout()
+plt.show()
