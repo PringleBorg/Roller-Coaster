@@ -12,6 +12,7 @@ u(t): help variable, defines as dlabda/dt, how fast labda changes over time t
 The big formula:
 first left of the triangle we see dlabda^2 / dt^2, which just is how fast the change of labda is(like how a is for speed) 
 the right of the triangle:
+
 lets first start with the numerator:
 the first part of the numerator is -gy' which you can translate too gravity along the track
 you can split this into 2 parts: -g and y'
@@ -26,4 +27,10 @@ you can see this like a math correction factor
 this is there because labda is not pre definition constant labda 0 to 1 can cover 1 meter and labda 1 to 2 can cover 10 for example.
 It works like this:
 We can split this into two parts as well: x'x''y'y'' and (dlabda/dt)^2
-x'x''y'y''
+x'x'' + y'y'' is the dot product of x'y' and x''y''. If the dotproduct is zero, both of the vectors are perpendicular. 
+This means that the track is changing but the "steps" labda takes are constant and there does not have to be a correction factor
+If it is not zero it can mean to different things: The labda values can be stretchet or shrunk. 
+The dot product measures this and gives how many units dlabda/dt it should change itself so that the model does not break
+
+Then the denumerator: x'^2 + y'^2
+This is like the Pythagoras theorem.  
