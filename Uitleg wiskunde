@@ -6,7 +6,7 @@ x' and y': together they make the point-vector to where the cart is facing
 x'' and y'': the variable of how fast x' and y' are changing(the curve in the track)
 g: gravity(9.81 here on earth)
 v(t): the speed of the cart
-a(t): the acceleratiin of the cart:
+a(t): the acceleration of the cart:
 u(t): help variable, defines as dlabda/dt, how fast labda changes over time t
 
 The big formula:
@@ -33,4 +33,9 @@ If it is not zero it can mean to different things: The labda values can be stret
 The dot product measures this and gives how many units dlabda/dt it should change itself so that the model does not break
 
 Then the denumerator: x'^2 + y'^2
-This is like the Pythagoras theorem.  
+This is like the Pythagoras theorem. Normally the Pythagoras theorem would give sqrt(x'^2 + y'^2), this is the real length of one step.
+Because of this, sqrt(x'^2 + y'^2) is also the conversion factor.
+But the denumerator is this but squared and that is because you need the conversionfactor twice. 
+The first time because in the numerator of the function there is a vector with length L. To only get the acceleration along the track this vector needs to be divided bij lengt L which is sqrt(x'^2 + y'^2)
+Now you have the acceleration in ms^2, but left of the equation is  dlabda^2 / dt^2. To achieve that we need to divide it another time with the conversion factor.
+
